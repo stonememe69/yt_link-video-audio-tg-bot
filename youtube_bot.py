@@ -10,8 +10,6 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 import yt_dlp
 import asyncio
 from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
 
 # Enable logging
 logging.basicConfig(
@@ -33,6 +31,9 @@ class YouTubeDownloader:
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
+            # Anti-bot bypass options
+            'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         }
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -48,11 +49,13 @@ class YouTubeDownloader:
     async def download_video(url: str, output_path: str) -> str:
         """Download video in best quality"""
         ydl_opts = {
-            'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+            'format': 'best[ext=mp4][height<=720]/best[ext=mp4]/best',
             'outtmpl': output_path,
-            'merge_output_format': 'mp4',
             'quiet': False,
             'no_warnings': False,
+            # Anti-bot bypass options
+            'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         }
         
         loop = asyncio.get_event_loop()
@@ -77,6 +80,9 @@ class YouTubeDownloader:
             }],
             'quiet': False,
             'no_warnings': False,
+            # Anti-bot bypass options
+            'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         }
         
         loop = asyncio.get_event_loop()
